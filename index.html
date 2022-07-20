@@ -161,6 +161,97 @@ mjx-container[display="true"] + br {
     <div id="content">
       
   
+    <article id="post-卷积及其在人工智能中的应用" class="article article-type-post" itemprop="blogPost" itemscope>
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 class="article-title" itemprop="name">
+      <a href="/2022/07/20/%E5%8D%B7%E7%A7%AF%E5%8F%8A%E5%85%B6%E5%9C%A8%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/">卷积及其在人工智能中的应用</a>
+      
+    </h2>
+  
+
+
+        <div class="article-meta">
+          <time class="article-date" datetime="2022-07-20T07:19:02.000Z" itemprop="datePublished">2022-07-20</time>
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        <h2 id="卷积"><a href="#卷积" class="headerlink" title="卷积"></a>卷积</h2><p><strong>什么是卷积？</strong></p>
+<p>如果抽象地来理解卷积的话，卷积是一维数组（内核，Kernel）对目标的递次变换。更形象一点地，卷积过程就如同卷起一块抹布，卷起来的部分厚度就会加大。</p>
+<p>例如，我定义一个平均算数内核：</p>
+<script type="math/tex; mode=display">K = \frac{1}{25} \begin{bmatrix} 1 & 1 & 1 & 1 & 1 \\ 1 & 1 & 1 & 1 & 1 \\ 1 & 1 & 1 & 1 & 1 \\ 1 & 1 & 1 & 1 & 1 \\ 1 & 1 & 1 & 1 & 1 \end{bmatrix}</script><p>并对某一图像的某一部分：</p>
+<script type="math/tex; mode=display">P =  \begin{bmatrix} 123 & 114 & 255 & 130 & 145 \\ 234 & 145 & 234 & 148 & 145 \\ 164 & 210 & 245 & 3 & 1 \\ 4 & 145& 7 & 124 & 3 \\ 1 & 1 & 1 & 1 & 1 \end{bmatrix}</script><p>进行卷积。当卷积开始时，内核数组左上角的第一个元素会与目标数组对齐并将内核下的元素相乘得到激活图。卷积在Deeping Learning与Autonomous Intelligent有着不可或缺的地位。</p>
+<hr>
+<h2 id="卷积在人工智能中的应用"><a href="#卷积在人工智能中的应用" class="headerlink" title="卷积在人工智能中的应用"></a>卷积在人工智能中的应用</h2><p>计算机通过将图片的每一个色点转化成0—255的特定数字，并用这些数字组成的三维数组，即行、列与色彩通道（RGB）来对图片进行特定操作。</p>
+<p>选择一张彩色图片：</p>
+<p><img src="https://img1.imgtp.com/2022/07/20/AXfI2gqc.jpg" alt="R-C _1_.jpg"></p>
+<p>利用opencv可查看该图片属性</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"></span><br><span class="line">img = cv.imread(<span class="string">&#x27;R-C (1).jpg&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(img.size)</span><br><span class="line"><span class="built_in">print</span>(img.shape)</span><br></pre></td></tr></table></figure>
+<p>运行结果如下：<br><img src="https://img1.imgtp.com/2022/07/20/o6cZ6EMr.png" alt="SY_3V~~KO_I5_QZBS7R2QCF.png"></p>
+<p>其中，shape返回了“行X列X色彩通道”的积，而size返回了包含行、列以及色彩通道数量的数组。灰度图片的色彩通道数为1。</p>
+<p>进一步地，卷积核可以对图片的行列像素进行变换，进而帮助分类器做更好的判断。</p>
+<hr>
+<h2 id="腐蚀、膨胀与开闭运算"><a href="#腐蚀、膨胀与开闭运算" class="headerlink" title="腐蚀、膨胀与开闭运算"></a>腐蚀、膨胀与开闭运算</h2><p>卷积在人工智能尤其是计算机视觉中有着不可或缺的地位，那具体应用有哪些呢？</p>
+<p>想让计算机将样本通过模型分类必须要将图片简单化，将其特征抽离出来。</p>
+<p>对于一张汽车图片：</p>
+<p><img src="https://img1.imgtp.com/2022/07/20/HsMLLtjs.jpg" alt="car2.jpg"></p>
+<p>我们通过对图片进行灰度处理来得到灰度图片：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"></span><br><span class="line">img = cv.imread(<span class="string">&quot;car2.jpg&quot;</span>)</span><br><span class="line">cv.imshow(<span class="string">&quot;img&quot;</span>,img)</span><br><span class="line">dst = cv.cvtColor(img,cv.COLOR_BGR2GRRAY)</span><br><span class="line">cv.imshow(<span class="string">&quot;GRAY&quot;</span>,dst)</span><br><span class="line">cv.waitKey()</span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<p><img src="https://img1.imgtp.com/2022/07/20/3PpfLmef.png" alt="KT_V7H4`5D4QX28TG_S_PPA.png"></p>
+<p>并对灰度图像进行裁切，选取我们感兴趣的部分：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">....</span><br><span class="line">M = np.float32([[<span class="number">1</span>,<span class="number">0</span>,-<span class="number">300</span>],[<span class="number">0</span>,<span class="number">1</span>,-<span class="number">300</span>]]) <span class="comment">#对图像平移</span></span><br><span class="line">warp = cv.warpAffine(dst,M,(<span class="number">0</span>,<span class="number">0</span>))</span><br><span class="line">dst1 = cv.resize(warp, (<span class="number">400</span>,<span class="number">400</span>)) <span class="comment">#进行缩放</span></span><br><span class="line">cv.imshow(<span class="string">&quot;GRAY&quot;</span>,dst1)</span><br><span class="line">cv.waitKey()</span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<p><img src="https://img1.imgtp.com/2022/07/20/qU34trjo.png" alt="BVYP7RPB__0MEFNLY0R@GDY.png"></p>
+<p>并进行二值化处理：</p>
+<p>一般的灰度图像，其像素点取值范围在0~255之间，取值越大，色点就越接近纯白色。二值化处理即将灰度图像中小于阈值的像素区域归为0，大于阈值的区域归为255，从而使图像特征更加明显。</p>
+<p>对于此图，车辆为黑色，使用二值化很容易将车辆的像素值归为0，进而丢失目标。因此，我将使用opencv中提供的反二值化类型（cv.THRESH_BINARY_INV)</p>
+<p>对于进一步地视频处理，我们可以使用混合的阈值处理来实现不同特征的识别。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">img = cv.imread(<span class="string">&quot;E:/Python/car2.jpg&quot;</span>)</span><br><span class="line">dst = cv.cvtColor(img,cv.COLOR_BGR2GRAY)</span><br><span class="line">M = np.float32([[<span class="number">1</span>,<span class="number">0</span>,-<span class="number">300</span>],[<span class="number">0</span>,<span class="number">1</span>,-<span class="number">300</span>]]) <span class="comment">#对图像平移</span></span><br><span class="line">warp = cv.warpAffine(dst,M,(<span class="number">0</span>,<span class="number">0</span>))</span><br><span class="line">dstc = cv.resize(warp, (<span class="number">400</span>,<span class="number">400</span>))<span class="comment">#进行缩放</span></span><br><span class="line">ret,dstc2=cv.threshold(dstc, <span class="number">0</span>, <span class="number">255</span>, cv.THRESH_BINARY_INV+cv.THRESH_OTSU)  <span class="comment">#反二值化处理</span></span><br><span class="line"></span><br><span class="line">cv.imshow(<span class="string">&quot;GRAY&quot;</span>,dstc2)</span><br><span class="line">cv.waitKey()</span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<p><img src="https://img1.imgtp.com/2022/07/20/gzqT2TUh.png" alt="S5037NA1_Q_PZ_55M4Z~U6T.png"><br>对图片的二值化处理得到了不错的结果。</p>
+<p>在实际开发中，二值化后得到的图片可能会损失目标的一部分特征。这表现在二值化可能会使目标边框变大，这时我们需要对二值化之后的图片进行卷积，即<strong>腐蚀</strong>。</p>
+<p>Opencv利用erode方法实现腐蚀。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.....</span><br><span class="line">k = np.ones((<span class="number">3</span>,<span class="number">3</span>),np.uint8) <span class="comment">#定义内核，其含义为创建一个3x3的元素全为1的矩阵。</span></span><br><span class="line">dstc3 = cv.erode(dstc2,k)</span><br><span class="line">cv.imshow(<span class="string">&quot;GRAY&quot;</span>,dstc3)</span><br><span class="line">cv.waitKey()</span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<p><img src="https://img1.imgtp.com/2022/07/20/HmeMNNGq.png" alt="_35WS5QEI_FIJ9QXX_J9A6D.png"></p>
+<p>我们将图片内目标的轮廓“腐蚀”掉了一圈。</p>
+<p>接下来我们将原图进行<strong>膨胀</strong></p>
+<p>opencv通过dilate方法实现膨胀，膨胀的原理与腐蚀类似，只不过增添了目标的轮廓。</p>
+<p><img src="https://img1.imgtp.com/2022/07/20/5YcI8Jiu.png" alt="_Z_A_WSLEXI~CV_D`J_~Q9P.png"></p>
+<p>为了抹除图片中不必要的细节或噪点，我们有必要对图片进行腐蚀或膨胀。腐蚀和膨胀的组合有助于突出目标特征。</p>
+<p>所谓开运算，即指的是对图片<strong>先腐蚀，后膨胀</strong>，从而消除图片中的干扰因素。</p>
+<p>腐蚀与膨胀都属于形态学运算的范畴。在形态学运算中，除基本的腐蚀、膨胀和开闭运算这些基础操作外，还可以将这些基础操作组合，从而达到不同的目的。</p>
+<p>opencv提供了cv.morphologyEx方法来帮助我们执行不同的形态学运算。</p>
+<p>例如，我们传入cv.MORPH_GRADIENT参数（梯度运算），它的意思是对让原图的膨胀图减去原图的腐蚀图。接下来我们将见证它的效果</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">....</span><br><span class="line">k = np.ones((<span class="number">3</span>,<span class="number">3</span>),np.uint8)</span><br><span class="line">dstc4 = cv.morphologyEx(dstc2,cv.MORPH_GRADIENT,k)</span><br><span class="line">cv.imshow(<span class="string">&quot;GRAY&quot;</span>,dstc4)</span><br><span class="line">cv.waitKey()</span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<p><img src="https://img1.imgtp.com/2022/07/20/wdZVnFid.png" alt="QQ图片20220720145943.png"></p>
+<p>梯度运算将图片元素的轮廓描绘了出来，在图中汽车的轮廓清晰可见。</p>
+<p>梯度运算的原理并不难理解，膨胀后的图片目标周围的像素值有相当一部分被填充成了255，而腐蚀后的图片则是被归为0，而中间的一部分并不会发生改变（仍是255），所以梯度运算将腐蚀部分保留了下来，将中间的不变的部分削去，进而得出图形的轮廓。</p>
+<hr>
+<p>实际上，形态学运算的基础正是卷积，卷积核就是上文提到的内核，卷积核在运算过程中依次地扫过图片的像素点，上文我们已经了解了图片是一个三维的数组，实际上图片的通道数在形态学运算中并不能使我们感兴趣，BGR色彩空间（即三原色色彩空间或者称彩色图像，Blue，Green，Red，这是在opencv中的规定，它实际上等价于RGB色彩空间）有时甚至会干扰核的运算，所以我们要将彩色图片（BGR）转化为灰度图片（GRAY）。</p>
+<p>一般的车辆识别都是基于对图像的不断变换，在运算过程中选用合适的阈值处理和形态学运算类型有助于我们更好地提取目标特征。</p>
+<p>$$\boxed{We\; are \; the \; successors,which \; run \; toward \; the \;unknow \; and \; the \; future}</p>
+
+      
+    </div>
+    
+    
+    
+      <footer class="article-footer">
+        <a href="/2022/07/20/%E5%8D%B7%E7%A7%AF%E5%8F%8A%E5%85%B6%E5%9C%A8%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/#idc-container">Comments</a>
+      </footer>
+    
+  </div>
+</article>
+
+
+
+  
     <article id="post-对ACG等小众文化的看法" class="article article-type-post" itemprop="blogPost" itemscope>
   <div class="article-inner">
     
